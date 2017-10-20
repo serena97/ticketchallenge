@@ -1,3 +1,6 @@
+/**
+* This class contains x and y points, assuming that the x and y coordinates are integers
+*/
 class Coordinates {
     private int x;
     private int y;
