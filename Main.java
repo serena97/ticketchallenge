@@ -58,9 +58,11 @@ public class Main {
 
   }
 
+  /**
+  * unserialize the events arrayList, so that randomly generated data is loaded
+  */
   @SuppressWarnings("unchecked")
   public void loadEvents() {
-    //unserialize the events arrayList
     try {
       FileInputStream fis = new FileInputStream("eventsfile.ser");
       ObjectInputStream ois = new ObjectInputStream(fis);
@@ -68,7 +70,7 @@ public class Main {
       ois.close();
       fis.close();
     } catch(IOException ioe) {
-      System.out.println("Making eventsfile.ser");
+      System.out.println("Generating new events...");
       return;
     } catch(ClassNotFoundException c) {
       c.printStackTrace();
@@ -76,8 +78,10 @@ public class Main {
     }
   }
 
+  /**
+  * serialize the events arrayList, so that randomly generated data can be retrieved for later use
+  */
   public void saveEvents() {
-    //serialize the events arrayList
     try {
       FileOutputStream fos= new FileOutputStream("eventsfile.ser");
       ObjectOutputStream oos= new ObjectOutputStream(fos);
