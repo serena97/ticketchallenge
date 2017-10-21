@@ -19,6 +19,8 @@ import java.io.*;
 */
 
 public class Main {
+  int max = 10;
+  int min = -10;
   Random random;
   ArrayList<Event> events = new ArrayList<Event>();
   TreeMap<Integer, Event> tmap = new TreeMap<Integer, Event>();
@@ -109,8 +111,8 @@ public class Main {
       Set<Coordinates> locSet = new HashSet<Coordinates>();
       int idCounter = 0;
       while(locSet.size() <= 50) { // seed 50 events
-        int x = random.nextInt(10) - 10; //-10 min, 10 max
-        int y = random.nextInt(10) - 10;
+        int x = random.nextInt(max - min + 1) + min;
+        int y = random.nextInt(max - min + 1) + min;
         Coordinates loc = new Coordinates(x,y);
         boolean added = locSet.add(loc); // returns true if set did not already contain the specified element
         if(added) {
@@ -120,9 +122,9 @@ public class Main {
           events.add(event);
         }
       }
+      // seeGeneratedCoordinates(locSet);
       saveEvents();
     }
-
     // testNoDuplicates();
   }
 
@@ -192,6 +194,12 @@ public class Main {
     }
   }
 
+
+  public void seeGeneratedCoordinates(Set<Coordinates> locSet) {
+    for(Coordinates c: locSet){
+      System.out.println("coords "+c.getX() + ", "+c.getY());
+    }
+  }
   /**
   * print relative distances and event ids
   */
