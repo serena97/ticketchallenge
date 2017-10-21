@@ -120,9 +120,9 @@ public class Main {
           events.add(event);
         }
       }
+      saveEvents();
     }
 
-    saveEvents();
     // testNoDuplicates();
   }
 
