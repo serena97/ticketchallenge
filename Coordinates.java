@@ -1,7 +1,9 @@
+import java.io.Serializable;
+
 /**
 * This class contains x and y points, assuming that the x and y coordinates are integers
 */
-class Coordinates {
+class Coordinates implements Serializable {
     private int x;
     private int y;
 

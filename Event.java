@@ -1,10 +1,11 @@
 import java.util.Arrays;
+import java.io.Serializable;
 
 /**
 * The Event class holds the unique numeric identifier,
 * an array of tickets(essentially the prices) and the location.
 */
-public class Event {
+public class Event implements Serializable {
   int id;
   double[] tickets;
   Coordinates location;

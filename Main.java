@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import java.util.Map;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.io.*;
 
 /**
 * The program accepts a user location as a pair of coordinates, and returns a list of
@@ -21,8 +22,6 @@ public class Main {
   Random random;
   ArrayList<Event> events = new ArrayList<Event>();
   TreeMap<Integer, Event> tmap = new TreeMap<Integer, Event>();
-  private static Main instance = null;
-
 
 /**
 *  Main method that gets user input, checks whether coordinates
@@ -59,26 +58,67 @@ public class Main {
 
   }
 
+  @SuppressWarnings("unchecked")
+  public void loadEvents() {
+    //unserialize the events arrayList
+    try {
+      FileInputStream fis = new FileInputStream("eventsfile.ser");
+      ObjectInputStream ois = new ObjectInputStream(fis);
+      events = (ArrayList<Event>) ois.readObject();
+      ois.close();
+      fis.close();
+    } catch(IOException ioe) {
+      System.out.println("Making eventsfile.ser");
+      return;
+    } catch(ClassNotFoundException c) {
+      c.printStackTrace();
+      return;
+    }
+  }
+
+  public void saveEvents() {
+    //serialize the events arrayList
+    try {
+      FileOutputStream fos= new FileOutputStream("eventsfile.ser");
+      ObjectOutputStream oos= new ObjectOutputStream(fos);
+      oos.writeObject(events);
+      oos.close();
+      fos.close();
+    } catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch(IOException ioe) {
+      ioe.printStackTrace();
+    }
+
+  }
+
   /**
-  * This method randomly generate seed events
+  * This method loads and saves events from stored arrayList, if there's no saved events randomly generate seed events
   */
   public void seedDB() {
-    //generate random location with no duplicates using set
-    random = new Random();
-    Set<Coordinates> locSet = new HashSet<Coordinates>();
-    int idCounter = 0;
-    while(locSet.size() <= 50) { // seed 50 events
-      int x = random.nextInt(10) - 10; //-10 min, 10 max
-      int y = random.nextInt(10) - 10;
-      Coordinates loc = new Coordinates(x,y);
-      boolean added = locSet.add(loc); // returns true if set did not already contain the specified element
-      if(added) {
-        double[] prices = generateRandomTickets();
-        idCounter++;
-        Event event = new Event(idCounter, prices, loc);
-        events.add(event);
+
+    loadEvents();
+
+    if(events.isEmpty()) {
+      //generate random location with no duplicates using set
+      random = new Random();
+      Set<Coordinates> locSet = new HashSet<Coordinates>();
+      int idCounter = 0;
+      while(locSet.size() <= 50) { // seed 50 events
+        int x = random.nextInt(10) - 10; //-10 min, 10 max
+        int y = random.nextInt(10) - 10;
+        Coordinates loc = new Coordinates(x,y);
+        boolean added = locSet.add(loc); // returns true if set did not already contain the specified element
+        if(added) {
+          double[] prices = generateRandomTickets();
+          idCounter++;
+          Event event = new Event(idCounter, prices, loc);
+          events.add(event);
+        }
       }
     }
+
+    saveEvents();
     // testNoDuplicates();
   }
 
